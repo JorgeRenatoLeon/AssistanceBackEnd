@@ -273,7 +273,7 @@ class UsuarioController extends Controller
             $existAux =UsuarioxPrograma::where('id_usuario',$request->id_usuario)->where('id_tipo_usuario',$request->tipo_usuario)->get();
             if(!empty($existAux)){
                 $usuario = Usuario::where('id_usuario',$request->id_usuario)->first();
-                if($usuario) $usuario->tipoUsuario()->wherePivot('id_programa',null)->wherePivot('id_tipo_usuario',$request->tipo_usuario)->detach();
+                $usuario->tipoUsuario()->wherePivot('id_programa',null)->wherePivot('id_tipo_usuario',$request->tipo_usuario)->detach();
             }
             return response()->json(['status'=>'sucess']);
         } catch (Exception $e){
