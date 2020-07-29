@@ -397,9 +397,9 @@ class FacultadController extends Controller
         try{
             $codigo=$request->getContent();
             if(empty($id)){
-                $dato=Facultad::where('codigo','ilike', '%' . $codigo . '%')->where('estado','act')->get();
+                $dato=Facultad::where('codigo','ilike', $codigo )->where('estado','act')->get();
             }else{
-                $dato=Facultad::where('id_facultad','!=',$id)->where('codigo','ilike', '%' . $codigo . '%')->where('estado','act')->get();
+                $dato=Facultad::where('id_facultad','!=',$id)->where('codigo','ilike',  $codigo )->where('estado','act')->get();
             }
             if(empty($dato[0])){//significa que no existe ese codigo
                 return response()->json(["success" => false],202);
@@ -415,9 +415,9 @@ class FacultadController extends Controller
         try{
             $nombre=$request->getContent();
             if(empty($id)){
-                $dato=Facultad::where('nombre','ilike', '%' . $nombre . '%')->where('estado','act')->get();
+                $dato=Facultad::where('nombre','ilike',  $nombre )->where('estado','act')->get();
             }else{
-                $dato=Facultad::where('id_facultad','!=',$id)->where('nombre','ilike', '%' . $nombre . '%')->where('estado','act')->get();
+                $dato=Facultad::where('id_facultad','!=',$id)->where('nombre','ilike', $nombre )->where('estado','act')->get();
             }
             if(empty($dato[0])){//significa que no existe ese nombre
                 return response()->json(["success" => false],202);

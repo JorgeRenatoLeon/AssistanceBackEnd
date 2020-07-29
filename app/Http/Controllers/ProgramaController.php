@@ -342,9 +342,9 @@ class ProgramaController extends Controller
         try{
             $codigo=$request->getContent();
             if(empty($id)){
-                $dato=Programa::where('codigo','ilike', '%' . $codigo . '%')->where('estado','act')->get();
+                $dato=Programa::where('codigo','ilike', $codigo)->where('estado','act')->get();
             }else{
-                $dato=Programa::where('id_programa','!=',$id)->where('codigo','ilike', '%' . $codigo . '%')->where('estado','act')->get();
+                $dato=Programa::where('id_programa','!=',$id)->where('codigo','ilike', $codigo )->where('estado','act')->get();
             }
             if(empty($dato[0])){//significa que no existe ese codigo
                 return response()->json(["success" => false],202);
@@ -360,9 +360,9 @@ class ProgramaController extends Controller
         try{
             $nombre=$request->getContent();
             if(empty($id)){
-                $dato=Programa::where('nombre','ilike', '%' . $nombre . '%')->where('estado','act')->get();
+                $dato=Programa::where('nombre','ilike', $nombre )->where('estado','act')->get();
             }else{
-                $dato=Programa::where('id_programa','!=',$id)->where('nombre','ilike', '%' . $nombre . '%')->where('estado','act')->get();
+                $dato=Programa::where('id_programa','!=',$id)->where('nombre','ilike', $nombre )->where('estado','act')->get();
             }
             if(empty($dato[0])){//significa que no existe ese nombre
                 return response()->json(["success" => false],202);
