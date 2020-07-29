@@ -269,9 +269,13 @@ class UsuarioController extends Controller
             $exist=UsuarioxPrograma::where('id_programa',$programa->id_programa)->get();
             if(!empty($exist)){
                 $programa->usuarios()->wherePivot('id_tipo_usuario',$request->tipo_usuario)->detach();
+                if($request->nuevo == 1) {
+                    $usuario = Usuario::findOrFail($request->id_usuario);
+                    $usuario->tipoUsuario()->attach($request->tipo_usuario, ['id_programa' => $request->id_programa]);
+                }
             }
             $existAux =UsuarioxPrograma::where('id_usuario',$request->id_usuario)->where('id_tipo_usuario',$request->tipo_usuario)->get();
-            if(!empty($existAux)){
+            if(!empty($existAux) && $request->nuevo==0){
                 $usuario = Usuario::where('id_usuario',$request->id_usuario)->first();
                 if ($usuario) $usuario->tipoUsuario()->wherePivot('id_programa',null)->wherePivot('id_tipo_usuario',$request->tipo_usuario)->detach();
             }
