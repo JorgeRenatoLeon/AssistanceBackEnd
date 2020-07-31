@@ -267,7 +267,7 @@ class CitaController extends Controller
 
             $citas=Disponibilidad::fromSub($sub,'subquery')->selectRaw("*");
             if($tipo!=""){
-                $citas->where('tipo_de_cita','=','$tipo');
+                $citas->where('tipo_de_cita','=',$tipo);
             }
             $citas=$citas->paginate(10);
             if (is_null($citas[0])){
