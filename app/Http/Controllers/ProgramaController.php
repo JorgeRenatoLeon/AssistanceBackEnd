@@ -114,8 +114,8 @@ class ProgramaController extends Controller
                 $programa->nombre=$prog['nombre'];
                 $programa->correo=$prog['correo'];
                 $programa->codigo=$prog['codigo'];
-                $programa->descripcion=$prog['descripcion'];
-                $programa->hora_bloque=$prog['hora_bloque'];
+                //$programa->descripcion=$prog['descripcion'];
+                //$programa->hora_bloque=$prog['hora_bloque'];
                 $programa->usuario_actualizacion=$prog['usuario_actualizacion'];
                 $programa->estado='act';
                 $programa->update();
