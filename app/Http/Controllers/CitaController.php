@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Disponibilidad;
 use Exception;
 use App\Cita;
 use App\Http\Controllers\Controller;
 use App\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Routing\Matcher\RedirectableUrlMatcher;
 
 class CitaController extends Controller
@@ -184,5 +186,111 @@ class CitaController extends Controller
             echo 'Excepción capturada: ', $e->getMessage(), "\n";
         }
     }
+
+    public function listCitaTutor(Request $request)
+    {
+        try {
+            $fecha_ini=$request->fecha_ini;
+            $fecha_fin=$request->fecha_fin;
+            $usuario=$request->id_usuario;
+            $tipo=$request->tipo;
+            $id_programa=$request->id_programa;
+
+            $sub=DB::table('disponibilidad')->
+            selectRaw('cita.id_cita,disponibilidad.id_disponibilidad,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,
+            disponibilidad.hora_inicio,CASE
+            when sum(case when asistencia=\'can\' or asistencia=\'sol\' then 1 else 0 end)>0 then \'Cancelada\'
+            when fecha+hora_inicio>now() then \'Pendiente\'
+            when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
+            join('cita','cita.id_disponibilidad','=','disponibilidad.id_disponibilidad')->
+            join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
+            join('usuario','usuario.id_usuario','=','disponibilidad.id_usuario')->
+            whereBetween('disponibilidad.fecha',[$fecha_ini,$fecha_fin])->
+            where('disponibilidad.id_usuario','=',$usuario)->
+            where('disponibilidad.id_programa','=',$id_programa)->
+            groupBy('cita.id_cita','disponibilidad.id_disponibilidad')->
+            orderBy('disponibilidad.fecha','desc')->
+            orderBy('hora_inicio','desc');
+
+
+            $citas=Cita::fromSub($sub,'subquery')->with('citaXUsuarios:cita_x_usuario.id_usuario,nombre,apellidos');
+            if($tipo!=""){
+                $citas->where('tipo_de_cita','=',$tipo);
+            }
+            $citas=$citas->paginate(10);
+
+            if (is_null($citas[0])){
+                return response()->json([],204);
+            }else{
+                //se retorna un array
+                $datosFinal=['paginate' => [
+                    'total'         => $citas->total(),
+                    'current_page'  => $citas->currentPage(),
+                    'per_page'      => $citas->perPage(),
+                    'last_page'     => $citas->lastPage(),
+                    'from'          => $citas->firstItem(),
+                    'to'            => $citas->lastPage(),
+                ],
+                    'tasks'=> $citas
+                ];
+                //compact('datos')
+                return response()->json($datosFinal);
+            }
+        } catch (Exception $e){
+            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+        }
+    }
+    public function listCitaAlu(Request $request)
+    {
+        try {
+            $fecha_ini=$request->fecha_ini;
+            $fecha_fin=$request->fecha_fin;
+            $usuario=$request->id_usuario;
+            $tipo=$request->tipo;
+            $id_programa=$request->id_programa;
+
+            $sub=DB::table('cita')->
+            selectRaw('cita.id_cita,cita_x_usuario.asistencia,disponibilidad.id_disponibilidad,disponibilidad.hora_inicio,
+            usuario.nombre,usuario.apellidos,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,CASE
+            when asistencia=\'can\' or asistencia=\'sol\' then \'Cancelada\'
+            when fecha+hora_inicio>now() then \'Pendiente\'
+            when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
+            join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
+            join('disponibilidad','disponibilidad.id_disponibilidad','=','cita.id_disponibilidad')->
+            join('usuario','usuario.id_usuario','=','disponibilidad.id_usuario')->
+            where('cita_x_usuario.id_usuario','=',$usuario)->
+            whereBetween('disponibilidad.fecha',[$fecha_ini,$fecha_fin])->
+            where('disponibilidad.id_programa','=',$id_programa)->
+            orderBy('disponibilidad.fecha','desc')->
+            orderBy('disponibilidad.hora_inicio','desc');
+
+
+            $citas=Disponibilidad::fromSub($sub,'subquery')->selectRaw("*");
+            if($tipo!=""){
+                $citas->where('tipo_de_cita','=','$tipo');
+            }
+            $citas=$citas->paginate(10);
+            if (is_null($citas[0])){
+                return response()->json([],204);
+            }else{
+                //se retorna un array
+                $datosFinal=['paginate' => [
+                    'total'         => $citas->total(),
+                    'current_page'  => $citas->currentPage(),
+                    'per_page'      => $citas->perPage(),
+                    'last_page'     => $citas->lastPage(),
+                    'from'          => $citas->firstItem(),
+                    'to'            => $citas->lastPage(),
+                ],
+                    'tasks'=> $citas
+                ];
+                //compact('datos')
+                return response()->json($datosFinal);
+            }
+        } catch (Exception $e){
+            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+        }
+    }
+
 
 }

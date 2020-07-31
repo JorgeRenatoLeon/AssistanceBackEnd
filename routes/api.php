@@ -208,6 +208,9 @@ Route::group(['middleware' => 'web','auth:api'], function () {
         Route::post('registrarCitaCoord', 'CitaController@registrarCitaCoord');
         Route::post('historcioAlumno', 'CitaController@histCitasAlumno');
         Route::post('editarCitaCoord', 'CitaController@editarCitaCoord');
+
+        Route::post('listCitaAlu', 'CitaController@listCitaAlu');
+        Route::post('listCitaTutor', 'CitaController@listCitaTutor');
     });
 
     Route::group(['prefix' => 'api/motivosConsulta'], function (){
