@@ -199,8 +199,8 @@ class CitaController extends Controller
             $sub=DB::table('disponibilidad')->
             selectRaw('cita.id_cita,disponibilidad.id_disponibilidad,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,
             disponibilidad.hora_inicio,CASE
-            when sum(case when asistencia=\'can\' or asistencia=\'sol\' then 1 else 0 end)>0 then \'Cancelada\'
-            when fecha+hora_inicio>now() then \'Pendiente\'
+            when cita.estado=\'eli\' then \'Cancelada\'
+            when fecha+hora_inicio>now() then \'Futura\'
             when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
             join('cita','cita.id_disponibilidad','=','disponibilidad.id_disponibilidad')->
             join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
@@ -253,8 +253,8 @@ class CitaController extends Controller
             $sub=DB::table('cita')->
             selectRaw('cita.id_cita,cita_x_usuario.asistencia,disponibilidad.id_disponibilidad,disponibilidad.hora_inicio,
             usuario.nombre,usuario.apellidos,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,CASE
-            when asistencia=\'can\' or asistencia=\'sol\' then \'Cancelada\'
-            when fecha+hora_inicio>now() then \'Pendiente\'
+            when cita.estado=\'eli\' then \'Cancelada\'
+            when fecha+hora_inicio>now() then \'Futura\'
             when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
             join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
             join('disponibilidad','disponibilidad.id_disponibilidad','=','cita.id_disponibilidad')->
