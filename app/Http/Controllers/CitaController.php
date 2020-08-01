@@ -213,7 +213,8 @@ class CitaController extends Controller
             orderBy('hora_inicio','desc');
 
 
-            $citas=Cita::fromSub($sub,'subquery')->with('citaXUsuarios:cita_x_usuario.id_usuario,nombre,apellidos');
+            $citas=Cita::fromSub($sub,'subquery')->
+            with('citaXUsuarios:cita_x_usuario.id_usuario,nombre,apellidos,imagen,codigo,condicion_alumno');
             if($tipo!=""){
                 $citas->where('tipo_de_cita','=',$tipo);
             }
