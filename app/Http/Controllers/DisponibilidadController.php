@@ -40,10 +40,10 @@ class DisponibilidadController extends Controller
     public function store(Request $request)
     {
         try {
-            $aux = Disponibilidad::select('disponibilidad.*')->whereDate('fecha','=',$request->fecha,'and')
+            /*$aux = Disponibilidad::select('disponibilidad.*')->whereDate('fecha','=',$request->fecha,'and')
                 ->where('hora_inicio',$request->hora_inicio)->get();
             if(count($aux))
-                return "Ya existe esa disponibilidad";
+                return "Ya existe esa disponibilidad";*/
             $disponibilidades = new Disponibilidad();
             $disponibilidades->id_usuario = $request->id_usuario;
             $disponibilidades->id_programa = $request->id_programa;
