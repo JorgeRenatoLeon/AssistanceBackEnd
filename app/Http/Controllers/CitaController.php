@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Disponibilidad;
+use App\Valores;
 use Exception;
 use App\Cita;
 use App\Http\Controllers\Controller;
@@ -186,6 +187,17 @@ class CitaController extends Controller
             echo 'Excepción capturada: ', $e->getMessage(), "\n";
         }
     }
+    public function tiposCitas(Request $request)
+    {
+        try {
+            $tipos=Valores::where('tabla','TIPO_CITA')->get(['nombre']);
+
+            return response()->json($tipos,200);
+        } catch (Exception $e){
+            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+        }
+    }
+
 
     public function listCitaTutor(Request $request)
     {
@@ -197,11 +209,11 @@ class CitaController extends Controller
             $id_programa=$request->id_programa;
 
             $sub=DB::table('disponibilidad')->
-            selectRaw('cita.id_cita,disponibilidad.id_disponibilidad,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,
-            disponibilidad.hora_inicio,CASE
-            when cita.estado=\'eli\' then \'Cancelada\'
-            when fecha+hora_inicio>now() then \'Futura\'
-            when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
+            selectRaw('cita.id_cita,disponibilidad.id_disponibilidad,fecha,
+            disponibilidad.hora_inicio,CASE when cita.estado=\'eli\' then \'Cancelada\'
+            when sum(case when asistencia=\'pen\' then 1 else 0 end)>0 then \'Pendiente\'
+            when fecha+hora_inicio>now() then \'Próxima\'
+            when fecha+hora_inicio<=now() then \'Registrada\' end as tipo_de_cita')->
             join('cita','cita.id_disponibilidad','=','disponibilidad.id_disponibilidad')->
             join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
             join('usuario','usuario.id_usuario','=','disponibilidad.id_usuario')->
@@ -219,7 +231,9 @@ class CitaController extends Controller
                 $citas->where('tipo_de_cita','=',$tipo);
             }
             $citas=$citas->paginate(10);
-
+            foreach ($citas as $cita){
+                $cita->fecha=date("d/m/Y", strtotime($cita->fecha));
+            }
             if (is_null($citas[0])){
                 return response()->json([],204);
             }else{
@@ -252,10 +266,10 @@ class CitaController extends Controller
 
             $sub=DB::table('cita')->
             selectRaw('cita.id_cita,cita_x_usuario.asistencia,disponibilidad.id_disponibilidad,disponibilidad.hora_inicio,
-            usuario.nombre,usuario.apellidos,TO_CHAR(fecha :: DATE, \'dd/mm/yyyy\') as fecha,CASE
+            usuario.nombre,usuario.apellidos,fecha,CASE
             when cita.estado=\'eli\' then \'Cancelada\'
-            when fecha+hora_inicio>now() then \'Futura\'
-            when fecha+hora_inicio<=now() then \'Realizada\' end as tipo_de_cita')->
+            when fecha+hora_inicio>now() then \'Próxima\'
+            when fecha+hora_inicio<=now() then \'Registrada\' end as tipo_de_cita')->
             join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
             join('disponibilidad','disponibilidad.id_disponibilidad','=','cita.id_disponibilidad')->
             join('usuario','usuario.id_usuario','=','disponibilidad.id_usuario')->
@@ -271,6 +285,9 @@ class CitaController extends Controller
                 $citas->where('tipo_de_cita','=',$tipo);
             }
             $citas=$citas->paginate(10);
+            foreach ($citas as $cita){
+                $cita->fecha=date("d/m/Y", strtotime($cita->fecha));
+            }
             if (is_null($citas[0])){
                 return response()->json([],204);
             }else{

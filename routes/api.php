@@ -208,7 +208,7 @@ Route::group(['middleware' => 'web','auth:api'], function () {
         Route::post('registrarCitaCoord', 'CitaController@registrarCitaCoord');
         Route::post('historcioAlumno', 'CitaController@histCitasAlumno');
         Route::post('editarCitaCoord', 'CitaController@editarCitaCoord');
-
+        Route::post('tiposCitas', 'CitaController@tiposCitas');
         Route::post('listCitaAlu', 'CitaController@listCitaAlu');
         Route::post('listCitaTutor', 'CitaController@listCitaTutor');
     });
