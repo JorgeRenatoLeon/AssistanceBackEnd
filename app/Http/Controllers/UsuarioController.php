@@ -400,7 +400,7 @@ class UsuarioController extends Controller
 
     public function vuelogin(Request $request)
     {
-        $pass = $this->decrypt($request->password);
+        $pass = $this->decrypt($request->password,'assistancesoporte');
         if(Auth::attempt(['correo' => $request->correo, 'password' => $pass])){
             $finduser = Usuario::where('correo', $request->correo)->first();
             if($finduser->estado == 'act'){
