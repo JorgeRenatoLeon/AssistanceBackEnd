@@ -274,7 +274,7 @@ class RegistroAlumnoController extends Controller
             }else{
                 $registro = RegistroAlumno::where('id_programa','=',$request->id_programa)->where('id_alumno','=',$request->id_alumno)
                     ->where('id_tutor','=',$request->id_tutor)->where('id_tipo_tutoria','=',$request->id_tipo_tutoria)
-                    ->where('estado','act')->update(['estado'=>'eli','usuario_actualizacion'=>$request->usuario_actualizacion]);
+                    ->where('estado','act')->update(['id_tutor'=>null,'usuario_actualizacion'=>$request->usuario_actualizacion]);
             }
             return response()->json([],200);
         }catch(Exception $e) {
