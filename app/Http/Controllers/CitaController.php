@@ -211,8 +211,8 @@ class CitaController extends Controller
             $sub=DB::table('disponibilidad')->
             selectRaw('cita.id_cita,disponibilidad.id_disponibilidad,fecha,
             disponibilidad.hora_inicio,CASE when cita.estado=\'eli\' then \'Cancelada\'
-            when sum(case when asistencia=\'pen\' then 1 else 0 end)>0 then \'Pendiente\'
             when fecha+hora_inicio>now() then \'Próxima\'
+            when sum(case when asistencia=\'pen\' then 1 else 0 end)>0 then \'Pendiente\'
             when fecha+hora_inicio<=now() then \'Registrada\' end as tipo_de_cita')->
             join('cita','cita.id_disponibilidad','=','disponibilidad.id_disponibilidad')->
             join('cita_x_usuario','cita.id_cita','=','cita_x_usuario.id_cita')->
