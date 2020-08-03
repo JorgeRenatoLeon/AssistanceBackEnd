@@ -187,13 +187,28 @@ class RegistroAlumnoController extends Controller
                 where('id_programa',$request->id_programa)
                     ->where('id_alumno',$request->id_alumno)
                     ->where('id_tipo_tutoria',$request->id_tipo_tutoria)
-                    ->where('estado','act')
                     ->first();
                 if($regAnterior){
-                    return response()->json([
-                        'status' => 'error',
-                        'mensaje'=> 'Ya se encuentra asignado a dicho tipo de tutoría',
-                        'registro' => $regAnterior],200);
+                    if($regAnterior->estado == 'act'){
+                        return response()->json([
+                            'status' => 'error',
+                            'mensaje'=> 'Ya se encuentra asignado a dicho tipo de tutoría',
+                            'registro' => $regAnterior],200);
+                    }
+                    else{
+                        RegistroAlumno::
+                            where('id_programa',$request->id_programa)
+                            ->where('id_alumno',$request->id_alumno)
+                            ->where('id_tipo_tutoria',$request->id_tipo_tutoria)
+                            ->update([
+                                'estado' => 'act',
+                                'usuario_actualizacion' => $request->usuario_actualizacion
+                            ]);
+                        return response()->json([
+                            'status' => 'success',
+                            'mensaje'=> 'Se asignó satisfactoriamente el tipo de tutoría',
+                            'registro' => $regAnterior],200);
+                    }
                 }
                 else{
                     $reg = new RegistroAlumno();
@@ -206,7 +221,7 @@ class RegistroAlumnoController extends Controller
                     $reg->save();
                     return response()->json([
                         'status' => 'success',
-                        'mensaje'=> 'Se asignó satisfactoriamente el tutor',
+                        'mensaje'=> 'Se asignó satisfactoriamente el tipo de tutoría',
                         'registro' => $reg],200);
                 }
             }
