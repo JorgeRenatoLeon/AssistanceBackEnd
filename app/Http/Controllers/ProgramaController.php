@@ -904,8 +904,9 @@ class ProgramaController extends Controller
         try{
             $programa=Programa::find($request->idProg);
             $datos['alumnos']=$programa->belongsToMany('App\Usuario','usuario_x_programa','id_programa','id_usuario')
-                ->selectRaw("valores.nombre as condicion, usuario.*")
-                ->join('valores','valores.abreviatura','=','usuario.condicion_alumno')
+                ->selectRaw("usuario.*")
+                //->selectRaw("valores.nombre as condicion, usuario.*")
+                //->join('valores','valores.abreviatura','=','usuario.condicion_alumno')
                 ->where('usuario_x_programa.id_tipo_usuario',$request->idTipoU)
                 ->where('usuario.nombre','ilike', '%' . $request->nombre . '%')
                 ->where('usuario.estado','act')
