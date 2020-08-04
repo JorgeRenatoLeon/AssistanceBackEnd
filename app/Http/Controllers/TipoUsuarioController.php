@@ -80,6 +80,7 @@ class TipoUsuarioController extends Controller
             $tipoUsuario->usuario_actualizacion = $request->usuario_actualizacion;
             $tipoUsuario->estado = 'eli';
             $tipoUsuario->save();
+            $tipoUsuario->usuarios()->detach();
             return response()->json(null,204);
         } catch (Exception $e){
             echo 'Excepción capturada: ', $e->getMessage(), "\n";

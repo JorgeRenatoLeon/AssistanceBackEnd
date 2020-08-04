@@ -143,9 +143,10 @@ class UsuarioController extends Controller
                 $usuario->nombre = $request->nombre;
                 $usuario->apellidos = $request->apellidos;
                 $usuario->sexo = $request->sexo;
-                $usuario->condicion_alumno = $request->condicion_alumno;
+                if($request->has('condicion_alumno')) {
+                    $usuario->condicion_alumno = $request->condicion_alumno;
+                }
                 $usuario->save();
-
                 if (!is_null($request->id_tipo_usuario) and !is_null($request->id_programaNuevo)) {
                     $usuario->tipoUsuario()->attach($request->id_tipo_usuario, ['id_programa' => $request->id_programaNuevo]);
                 }
