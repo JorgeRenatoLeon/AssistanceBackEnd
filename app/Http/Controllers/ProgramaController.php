@@ -610,17 +610,19 @@ class ProgramaController extends Controller
             $tutorAsignado = RegistroAlumno::where('id_alumno',$request->id_alumno)->where('id_programa',$request->id_programa)->where('estado','act')->get();
             if($tutorAsignado) {
                 foreach ($tutorAsignado as $ta) {
-                    $tutorAsignadoM = Usuario::findOrFail($ta->id_tutor);
-                    $tutorAsignadoM->ttAsignado = $ta->tipoTutoria;
-                    $ttsPrograma= array();
-                    foreach ($tutorAsignadoM->tipoTutorias as $item) {
-                        if($item['id_programa']==$request->id_programa){
-                            array_push($ttsPrograma,$item);
+                    if($ta->id_tutor){
+                        $tutorAsignadoM = Usuario::findOrFail($ta->id_tutor);
+                        $tutorAsignadoM->ttAsignado = $ta->tipoTutoria;
+                        $ttsPrograma= array();
+                        foreach ($tutorAsignadoM->tipoTutorias as $item) {
+                            if($item['id_programa']==$request->id_programa){
+                                array_push($ttsPrograma,$item);
+                            }
                         }
+                        $tutorAsignadoM['tutoriasPrograma'] = $ttsPrograma;
+                        array_push($tutoresFinal, $tutorAsignadoM);
+                        array_push($tutoresAsignados, $tutorAsignadoM->nombre);
                     }
-                    $tutorAsignadoM['tutoriasPrograma'] = $ttsPrograma;
-                    array_push($tutoresFinal, $tutorAsignadoM);
-                    array_push($tutoresAsignados, $tutorAsignadoM->nombre);
                 }
             }
             $i = 0;
@@ -904,8 +906,9 @@ class ProgramaController extends Controller
         try{
             $programa=Programa::find($request->idProg);
             $datos['alumnos']=$programa->belongsToMany('App\Usuario','usuario_x_programa','id_programa','id_usuario')
-                ->selectRaw("valores.nombre as condicion, usuario.*")
-                ->join('valores','valores.abreviatura','=','usuario.condicion_alumno')
+                ->selectRaw("usuario.*")
+                //->selectRaw("valores.nombre as condicion, usuario.*")
+                //->join('valores','valores.abreviatura','=','usuario.condicion_alumno')
                 ->where('usuario_x_programa.id_tipo_usuario',$request->idTipoU)
                 ->where('usuario.nombre','ilike', '%' . $request->nombre . '%')
                 ->where('usuario.estado','act')
