@@ -610,7 +610,7 @@ class ProgramaController extends Controller
             $tutorAsignado = RegistroAlumno::where('id_alumno',$request->id_alumno)->where('id_programa',$request->id_programa)->where('estado','act')->get();
             if($tutorAsignado) {
                 foreach ($tutorAsignado as $ta) {
-                    if($ta){
+                    if($ta->id_tutor){
                         $tutorAsignadoM = Usuario::findOrFail($ta->id_tutor);
                         $tutorAsignadoM->ttAsignado = $ta->tipoTutoria;
                         $ttsPrograma= array();
