@@ -175,7 +175,8 @@ class SolicitudController extends Controller
                         ->update([
                             'id_usuario_relacionado'=>$request->id_solicitante,
                             'estado'=>'act',
-                            'usuario_actualizacion'=>$request->id_solicitante]);
+                            'usuario_actualizacion'=>$request->id_solicitante,
+                            'motivo'=>$request->motivo]);
                 }
 
             }else{
