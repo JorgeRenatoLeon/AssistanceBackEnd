@@ -136,33 +136,48 @@ class SolicitudController extends Controller
             $habilitado = Solicitud::where('estado','act')->where('id_solicitante',$request->id_solicitante)
                 ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->first();
             $habilitados = Solicitud::where('estado','eli')->where('id_solicitante',$request->id_solicitante)
-                ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->where('id_usuario_relacionado',$request->id_tutor)->first();
+                ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->first();
+            $tutorSol = Solicitud::where('estado','eli')->where('id_solicitante',$request->id_solicitante)
+                ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)
+                ->where('id_usuario_relacionado',$request->id_tutor)->first();
             if($habilitado){
                 return response()->json(['habilitado'=>'No','mensaje'=>'Tiene una solicitud pendiente'],200);
             }else if($habilitados){
-                $idtt = TipoTutoria::where('nombre',$request->motivo)->first()->id_tipo_tutoria;
-                $tutor = RegistroAlumno::where('id_alumno',$request->id_solicitante)->where('id_tutor',$habilitados['id_usuario_relacionado'])->where('id_tipo_tutoria',$idtt)->where('estado','act')->first();
-                if($tutor){
-                    return response()->json(['habilitado'=>'No','mensaje'=>'Ya se respondió su solicitud'],200);
-                }else{
-                    //buscar al coordinador de programa de ese id_programa
-                    $programa = Programa::find($request->id_programa);
-                    $datos['coordinador']=$programa->belongsToMany('App\Usuario','usuario_x_programa','id_programa','id_usuario')->withPivot('id_tipo_usuario')->where('usuario_x_programa.id_tipo_usuario',3)->get();
-                    //id_remitente= id_coordinador
-                    $id_remitente=$datos['coordinador'][0]['id_usuario'];
-                    //id_usuario_creacion=id_solicitante
-                    Solicitud::where('estado','eli')
-                        ->where('id_solicitante',$request->id_solicitante)
-                        ->where('tipo_solicitud','Tutor')
-                        ->where('id_programa',$request->id_programa)
-                        ->update([
-                            'id_remitente'=>$id_remitente,
-                            'estado'=>'act',
-                            'id_usuario_relacionado'=>$request->id_tutor,
-                            'usuario_actualizacion'=>$request->id_solicitante,
-                            'motivo'=>$request->motivo]);
-                    return response()->json(['habilitado'=>'Si','mensaje'=>'Si se encuentra habilitado'],200);
+                if($tutorSol){
+                    $idtt = TipoTutoria::where('nombre',$request->motivo)->first()->id_tipo_tutoria;
+                    $tutor = RegistroAlumno::where('id_alumno',$request->id_solicitante)->where('id_tutor',$habilitados['id_usuario_relacionado'])->where('id_tipo_tutoria',$idtt)->where('estado','act')->first();
+                    if($tutor){
+                        return response()->json(['habilitado'=>'No','mensaje'=>'Ya se respondió su solicitud'],200);
+                    }
+                    else{
+                        //buscar al coordinador de programa de ese id_programa
+                        $programa = Programa::find($request->id_programa);
+                        $datos['coordinador']=$programa->belongsToMany('App\Usuario','usuario_x_programa','id_programa','id_usuario')->withPivot('id_tipo_usuario')->where('usuario_x_programa.id_tipo_usuario',3)->get();
+                        //id_remitente= id_coordinador
+                        $id_remitente=$datos['coordinador'][0]['id_usuario'];
+                        //id_usuario_creacion=id_solicitante
+                        Solicitud::where('estado','eli')
+                            ->where('id_solicitante',$request->id_solicitante)
+                            ->where('tipo_solicitud','Tutor')
+                            ->where('id_programa',$request->id_programa)
+                            ->update([
+                                'id_remitente'=>$id_remitente,
+                                'estado'=>'act',
+                                'id_usuario_relacionado'=>$request->id_tutor,
+                                'usuario_actualizacion'=>$request->id_solicitante,
+                                'motivo'=>$request->motivo]);
+                        return response()->json(['habilitado'=>'Si','mensaje'=>'Si se encuentra habilitado'],200);
+                    }
                 }
+                else{
+                    Solicitud::where('estado','eli')->where('id_solicitante',$request->id_solicitante)
+                        ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)
+                        ->update([
+                            'id_usuario_relacionado'=>$request->id_solicitante,
+                            'estado'=>'act',
+                            'usuario_actualizacion'=>$request->id_solicitante]);
+                }
+
             }else{
                 //buscar al coordinador de programa de ese id_programa
                 $programa = Programa::find($request->id_programa);
