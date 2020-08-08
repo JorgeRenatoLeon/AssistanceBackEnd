@@ -173,7 +173,7 @@ class SolicitudController extends Controller
                     Solicitud::where('estado','eli')->where('id_solicitante',$request->id_solicitante)
                         ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)
                         ->update([
-                            'id_usuario_relacionado'=>$request->id_solicitante,
+                            'id_usuario_relacionado'=>$request->id_tutor,
                             'estado'=>'act',
                             'usuario_actualizacion'=>$request->id_solicitante,
                             'motivo'=>$request->motivo]);
