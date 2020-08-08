@@ -177,6 +177,7 @@ class SolicitudController extends Controller
                             'estado'=>'act',
                             'usuario_actualizacion'=>$request->id_solicitante,
                             'motivo'=>$request->motivo]);
+                    return response()->json(['habilitado'=>'Si','mensaje'=>'Si se encuentra habilitado'],200);
                 }
 
             }else{
