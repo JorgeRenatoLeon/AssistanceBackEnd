@@ -32,6 +32,7 @@ class UsuarioController extends Controller
             $usuario = Usuario::
                 where(function($query) use ($request){
                     $query->where('apellidos','ILIKE','%'.$request->busqueda.'%');
+                    $query->orWhere('nombre','ILIKE','%'.$request->busqueda.'%');
                     $query->orWhere('correo','ILIKE','%'.$request->busqueda.'%');
                     $query->orWhere('codigo','ILIKE','%'.$request->busqueda.'%');
                 })
