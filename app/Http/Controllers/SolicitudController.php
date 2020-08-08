@@ -136,12 +136,12 @@ class SolicitudController extends Controller
             $habilitado = Solicitud::where('estado','act')->where('id_solicitante',$request->id_solicitante)
                 ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->first();
             $habilitados = Solicitud::where('estado','eli')->where('id_solicitante',$request->id_solicitante)
-                ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->first();
+                ->where('tipo_solicitud','Tutor')->where('id_programa',$request->id_programa)->where('id_usuario_relacionado',$request->id_tutor)->first();
             if($habilitado){
                 return response()->json(['habilitado'=>'No','mensaje'=>'Tiene una solicitud pendiente'],200);
             }else if($habilitados){
                 $idtt = TipoTutoria::where('nombre',$request->motivo)->first()->id_tipo_tutoria;
-                $tutor = RegistroAlumno::where('id_alumno',$request->id_solicitante)->where('tipo_solicitud','Tutor')->where('id_tutor',$habilitados['id_usuario_relacionado'])->where('id_tipo_tutoria',$idtt)->where('estado','act')->first();
+                $tutor = RegistroAlumno::where('id_alumno',$request->id_solicitante)->where('id_tutor',$habilitados['id_usuario_relacionado'])->where('id_tipo_tutoria',$idtt)->where('estado','act')->first();
                 if($tutor){
                     return response()->json(['habilitado'=>'No','mensaje'=>'Ya se respondió su solicitud'],200);
                 }else{
