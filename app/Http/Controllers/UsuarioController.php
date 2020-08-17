@@ -1199,7 +1199,7 @@ class UsuarioController extends Controller
             factory(Usuario::class,50)
             ->create()
             ->each(function ($user) {
-                $user->tipoUsuario()->attach(5, ['id_programa' => 3]);
+                $user->tipoUsuario()->attach(5, ['id_programa' => 5]);
             });
 
         return response()->json($user,200);
