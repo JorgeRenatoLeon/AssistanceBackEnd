@@ -16,6 +16,7 @@ class PlanAccionController extends Controller
             $planAccion->id_tutor=$request->id_tutor;
             $planAccion->id_alumno=$request->id_alumno;
             $planAccion->nombre=$request->nombre;
+            $planAccion->fecha_inicio=$request->fecha;
             $planAccion->descripcion=$request->descripcion;
             $planAccion->id_programa=$request->id_programa;
             $planAccion->usuario_creacion = $request->id_tutor;
@@ -48,6 +49,7 @@ class PlanAccionController extends Controller
             if($request->mod){
                 $planAccion->nombre = $request->mod['nombre'];
                 $planAccion->descripcion = $request->mod['descripcion'];
+                $planAccion->fecha_inicio=$request->mod['fecha_inicio'];
                 $planAccion->save();
             }
 

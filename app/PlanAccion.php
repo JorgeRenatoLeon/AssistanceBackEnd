@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_programa
  * @property string $nombre
  * @property string $descripcion
+ * @property string $fecha_inicio
  * @property string $estado
  * @property string $fecha_creacion
  * @property string $fecha_actualizacion
@@ -40,7 +41,7 @@ class PlanAccion extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_tutor', 'id_programa','id_alumno', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_actualizacion', 'usuario_creacion', 'usuario_actualizacion'];
+    protected $fillable = ['id_tutor', 'id_programa','fecha_inicio','id_alumno', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_actualizacion', 'usuario_creacion', 'usuario_actualizacion'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
