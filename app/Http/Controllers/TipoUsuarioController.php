@@ -191,7 +191,7 @@ class TipoUsuarioController extends Controller
                 //echo gettype($tipo)."\n";
                 $tipo->programa;
                 if($tipo->programa['id_programa']==$request->id_programa || $tipo->programa['id_programa']==1 || $tipo->programa['nombre']==$facu->nombre){
-                    if($tipo['id_programa']!= '1' && $tipo['nombre']!= "Tutor" && $tipo['nombre']!= "Alumno") {
+                    if($tipo['id_programa']!= '1' && ($tipo['nombre']!= "Tutor" || $tipo['nombre']!= "Alumno")) {
                         $permisos=$tipo->permisos()->pluck('permiso.id_permiso');
                         //return response()->json($permisos);
                         $esTutor=0;
