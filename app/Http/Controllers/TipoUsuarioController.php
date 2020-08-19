@@ -172,7 +172,7 @@ class TipoUsuarioController extends Controller
             foreach ($tipos as $tipo) {
                 $tipo->programa;
                 if($tipo->programa['id_facultad']==$request->id_facultad || $tipo->programa['id_programa']==1){
-                    if($tipo['nombre']!= 'Admin' && $tipo['nombre']!= 'Coordinador Facultad') array_push($resp,$tipo);
+                    if($tipo['nombre']!= 'Admin' && $tipo['id_tipo_usuario']!= 2) array_push($resp,$tipo);
                 }
             }
             return response()->json($resp);
@@ -191,7 +191,7 @@ class TipoUsuarioController extends Controller
                 //echo gettype($tipo)."\n";
                 $tipo->programa;
                 if($tipo->programa['id_programa']==$request->id_programa || $tipo->programa['id_programa']==1 || $tipo->programa['nombre']==$facu->nombre){
-                    if($tipo['nombre']!= 'Admin' && $tipo['id_tipo_usuario']!= 2 && $tipo['id_tipo_usuario']!= 3) {
+                    if($tipo['nombre']!= 'Admin' && $tipo['id_tipo_usuario']!= 2 && $tipo['id_tipo_usuario']!= 3 && $tipo['id_tipo_usuario']!= 6) {
                         $permisos=$tipo->permisos()->pluck('permiso.id_permiso');
                         //return response()->json($permisos);
                         $esTutor=0;
