@@ -288,8 +288,7 @@ class ProgramaController extends Controller
     //devolver id del coordinadores
     public function idCoordinador($id){
         try{
-            $idTCoordProg = TipoUsuario::where('id_tipo_usuario',3)->first()->id_tipo_usuario;
-            $id_usuario=UsuarioxPrograma::where('id_programa',$id)->where('id_tipo_usuario',$idTCoordProg)->first();
+            $id_usuario=UsuarioxPrograma::where('id_programa',$id)->where('id_tipo_usuario',6)->first();
             if($id_usuario){
                 $usuario = Usuario::where('id_usuario',$id_usuario->id_usuario)->first();
                 return $usuario;
