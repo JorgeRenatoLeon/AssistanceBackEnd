@@ -136,6 +136,7 @@ class SesionController extends Controller
             $disponibilidades->usuario_creacion = $request->usuario_creacion;
             $disponibilidades->usuario_actualizacion = $request->usuario_actualizacion;
             $disponibilidades->tipo_disponibilidad = 'oca'; //ocasional
+            $disponibilidades->hora_fin = $request->hora_fin;
             $disponibilidades->save();
             //Creacion de la cita
             $citas = new Cita();

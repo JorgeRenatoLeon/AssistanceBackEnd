@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Usuario $usuario
  * @property Programa $programa
  * @property Citum[] $citas
+ * @property string $hora_fin
  */
 class Disponibilidad extends Model
 {
@@ -40,7 +41,7 @@ class Disponibilidad extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_usuario', 'id_programa', 'fecha', 'hora_inicio', 'estado', 'fecha_creacion', 'fecha_actualizacion', 'usuario_creacion', 'usuario_actualizacion', 'tipo_disponibilidad'];
+    protected $fillable = ['id_usuario', 'id_programa', 'fecha', 'hora_inicio', 'estado', 'fecha_creacion', 'fecha_actualizacion', 'usuario_creacion', 'usuario_actualizacion', 'tipo_disponibilidad', 'hora_fin'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
