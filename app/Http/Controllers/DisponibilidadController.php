@@ -53,6 +53,7 @@ class DisponibilidadController extends Controller
             $disponibilidades->usuario_creacion = $request->usuario_creacion;
             $disponibilidades->usuario_actualizacion = $request->usuario_actualizacion;
             $disponibilidades->tipo_disponibilidad = $request->tipo_disponibilidad;
+            $disponibilidades->hora_fin = $request->hora_fin;
             $disponibilidades->save();
             return response()->json($disponibilidades,201);
         } catch (Exception $e){
@@ -72,6 +73,7 @@ class DisponibilidadController extends Controller
             $disponibilidades->usuario_creacion = $request->usuario_creacion;
             $disponibilidades->usuario_actualizacion = $request->usuario_actualizacion;
             $disponibilidades->tipo_disponibilidad = $request->tipo_disponibilidad;
+            $disponibilidades->hora_fin = $request->hora_fin;
             $disponibilidades->save();
             return response()->json($disponibilidades,200);
         } catch (ModelNotFoundException $e){
@@ -282,7 +284,7 @@ class DisponibilidadController extends Controller
     {
         try {
             $citaxUsuario = Sesion::select('cita_x_usuario.asistencia','sesion.resultado','sesion.estado as estadoSesion','tipo_tutoria.nombre as tipoTutoria','disponibilidad.fecha',
-                'disponibilidad.hora_inicio','disponibilidad.estado as dispEstado','disponibilidad.tipo_disponibilidad','disponibilidad.id_programa','usuario.id_usuario as idTutor',
+                'disponibilidad.hora_inicio', 'disponibilidad.hora_fin','disponibilidad.estado as dispEstado','disponibilidad.tipo_disponibilidad','disponibilidad.id_programa','usuario.id_usuario as idTutor',
                 'usuario.estado as usuarioEstado','usuario.correo','usuario.nombre','usuario.apellidos','usuario.codigo as codigoTutor')
                 ->join('cita_x_usuario','sesion.id_sesion','cita_x_usuario.id_cita')
                 ->join('cita','cita_x_usuario.id_cita','cita.id_cita')
