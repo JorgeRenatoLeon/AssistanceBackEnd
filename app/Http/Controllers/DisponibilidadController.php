@@ -227,7 +227,7 @@ class DisponibilidadController extends Controller
         try {
             $condciones=DB::table('valores')->where('tabla','CONDICION_ALUMNO')->get();
             $disponibilidad=Disponibilidad::findOrFail($request->idDisponibilidad);
-            $disponibilidad2=Disponibilidad::findOrFail($request->idDisponibilidad);
+            $disponibilidad2=Disponibilidad::where('id_disponibilidad',$request->idDisponibilidad)->get();
             $cita=$disponibilidad->citas()->with('citaXUsuarios')->with('tipoTutoria')->get();
             $len = count($cita);
             for ($i = 0; $i < $len; $i++)
