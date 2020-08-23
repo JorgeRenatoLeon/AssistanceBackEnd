@@ -246,10 +246,10 @@ class DisponibilidadController extends Controller
                         array_push($rpta,$sesion[0]);
                     else
                         array_push($rpta,'l');
-                    return response()->json($rpta,$disponibilidad2,200);
+                    return response()->json([$rpta,$disponibilidad2],200);
                 }
             }
-            return response()->json('l',$disponibilidad2,200);
+            return response()->json(['l',$disponibilidad2],200);
         } catch (Exception $e){
             echo 'Excepción capturada: ', $e->getMessage(), "\n";
         }
