@@ -227,6 +227,7 @@ class DisponibilidadController extends Controller
         try {
             $condciones=DB::table('valores')->where('tabla','CONDICION_ALUMNO')->get();
             $disponibilidad=Disponibilidad::findOrFail($request->idDisponibilidad);
+            $disponibilidad2=Disponibilidad::where('id_disponibilidad',$request->idDisponibilidad)->get();
             $cita=$disponibilidad->citas()->with('citaXUsuarios')->with('tipoTutoria')->get();
             $len = count($cita);
             for ($i = 0; $i < $len; $i++)
@@ -245,10 +246,10 @@ class DisponibilidadController extends Controller
                         array_push($rpta,$sesion[0]);
                     else
                         array_push($rpta,'l');
-                    return response()->json($rpta,200);
+                    return response()->json([$rpta,$disponibilidad2],200);
                 }
             }
-            return response()->json('l',200);
+            return response()->json(['l',$disponibilidad2],200);
         } catch (Exception $e){
             echo 'Excepción capturada: ', $e->getMessage(), "\n";
         }
