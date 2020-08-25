@@ -143,7 +143,7 @@ class InstitucionController extends Controller
             //Image::make($request->get('image'))->save(public_path('../storage/app/public/images/').$name);
             Storage::putFileAs('images',$image,$name);
             return response()->json(['success' => 'You have successfully uploaded an image',
-            'path' => 'http://tutoriaback.inf.pucp.edu.pe/images/images/'.$name,
+            'path' => 'https://tutoriaback.inf.pucp.edu.pe/images/images/'.$name,
             'name' => $name], 200);
         }
     }
