@@ -7,7 +7,7 @@ Assistance es una aplicación web para el soporte de el sistema de tutorías de 
 ### Integrantes
 
 - **[Jorge](https://vehikl.com/)**
-- **[Carolina](https://github.com/Carolina19620)**
+- **[Carolina](https://github.com/CarolinaMejiaMujica)**
 - **[Alexander](https://github.com/aklerr)**
 - **[Edinson]()**
 
