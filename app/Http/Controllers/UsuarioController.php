@@ -805,10 +805,10 @@ class UsuarioController extends Controller
                     $error_repetitivo = 0;
                     //si pasa la validacion, no se actualiza campos que esten vacios en el csv
                     if ($data['nombre'] != '') {
-                        $usuario->nombre = $data['nombre'];
+                        $usuario->nombre = utf8_encode($data['nombre']);
                     }
                     if ($data['apellidos'] != '') {
-                        $usuario->apellidos = $data['apellidos'];
+                        $usuario->apellidos = utf8_encode($data['apellidos']);
                     }
                     if ($data['correo'] != '') {
                         $usuario->correo = $data['correo'];
@@ -894,8 +894,8 @@ class UsuarioController extends Controller
                 $usuario = new Usuario();
                 $usuario->codigo = $data['codigo'];
                 $usuario->correo = $data['correo'];
-                $usuario->nombre = $data['nombre'];
-                $usuario->apellidos = $data['apellidos'];
+                $usuario->nombre = utf8_encode($data['nombre']);
+                $usuario->apellidos = utf8_encode($data['apellidos']);
                 $usuario->password = $pass;
                 $usuario->usuario_creacion = $request->usuario;
                 $usuario->usuario_actualizacion = $request->usuario;
