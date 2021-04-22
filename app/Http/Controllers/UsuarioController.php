@@ -5,7 +5,7 @@ use App\Cita;
 use App\Mail\CorreoUsuario;
 use App\PlanAccion;
 use App\TipoTutoria;
-use App\UsuarioXPrograma;
+use App\UsuarioxPrograma;
 use App\Valores;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
