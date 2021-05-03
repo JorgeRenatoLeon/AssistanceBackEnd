@@ -745,7 +745,8 @@ class UsuarioController extends Controller
         try {
             $const_errores=15;
             $file = $request->file('file');
-            if(!($file->extension() == 'csv') && !($file->extension()=='txt')){
+            if(!($file->extension() == 'csv') && !($file->extension()=='txt')
+                && !($file->getMimeType()=="text/x-Algol68")){
                 return response()->json(['status'=>'El archivo no tiene formato csv' ],200);
             }
             $handle = fopen($file, "r");
@@ -935,8 +936,8 @@ class UsuarioController extends Controller
                 'codigo' => ['required', 'max:8', 'regex:/^[A-Z0-9]+$/'],//codigo
                 'correo' => ['required', 'email', 'regex:/(.*)(@pucp.edu.pe$|@pucp.pe$)/'],//correo
                 //$reg = '/^[a-z"]{1, '. $number .'}$/'; usando variable para el dominio en un futuro
-                'nombre' => ['required', 'max:100', 'regex:/^[\pL\s\-\ñ\Ñ]+$/'],//nombres
-                'apellidos' => ['required', 'max:100', 'regex:/^[\pL\s\-\ñ\Ñ]+$/'],//apellidos
+                'nombre' => ['required', 'max:100', "regex:/^[\pL\s\-\'\ñ\Ñ]+$/"],//nombres
+                'apellidos' => ['required', 'max:100', "regex:/^[\pL\s\-\'\ñ\Ñ]+$/"],//apellidos
                 'telefono' => 'min:7|max:20|regex:/^[0-9-]*$/',//telefono
                 'condicion' => 'in:' . $condiones,
             ]);
@@ -946,8 +947,8 @@ class UsuarioController extends Controller
                 'codigo' => ['required', 'max:8', 'regex:/^[A-Z0-9]+$/'],//codigo
                 'correo' => ['unique:usuario','email', 'regex:/(.*)(@pucp.edu.pe$|@pucp.pe$)/'],//correo
                 //$reg = '/^[a-z"]{1, '. $number .'}$/'; usando variable para el dominio en un futuro
-                'nombre' => ['max:100', 'regex:/^[\pL\s\-\ñ\Ñ]*$/'],//nombres
-                'apellidos' => ['max:100', 'regex:/^[\pL\s\-\ñ\Ñ]*$/'],//apellidos
+                'nombre' => ['max:100', "regex:/^[\pL\s\-\'\ñ\Ñ]+$/"],//nombres
+                'apellidos' => ['max:100', "regex:/^[\pL\s\-\'\ñ\Ñ]+$/"],//apellidos
                 'telefono' => 'min:7|max:20|regex:/^[0-9-]*$/',//telefono
                 'condicion' => 'in:' . $condiones,
             ]);
